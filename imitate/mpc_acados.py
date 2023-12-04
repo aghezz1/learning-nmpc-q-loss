@@ -291,7 +291,7 @@ class MPCBaseClass:
         controls = np.zeros((self.N, self.model.na))
 
         # initialize solver
-        self.ocp_solver.load_iterate("acados_def_iter/ocp_def_iter.json")
+        self.ocp_solver.load_iterate("acados_def_iter/ocp_def_iter.json", verbose=False)
         self.ocp_solver.set(0, "x", x0)
         self.ocp_solver.set(0, "lbx", x0)
         self.ocp_solver.set(0, "ubx", x0)
@@ -388,6 +388,10 @@ class MPCBaseClass:
             "lambda0": lambda0,
         }
 
+    def solve_for_x0(self, x0):
+        sol_dict = self.solve_ocp(x0)
+        return sol_dict["controls"][0,:]
+
     def collect_initial_state(
         self, N_samples: int, feasible: bool = False, constraint_span: float = 0.2
     ) -> np.ndarray:
@@ -460,9 +464,7 @@ class MPCBaseClass:
         for batch_idx, (x0, u0) in enumerate(zip(x_batch, u_batch)):
             # set initial state
             # initialize solver? # TODO
-            self.parametric_ocp_solver.load_iterate(
-                "acados_def_iter/param_ocp_def_iter.json"
-            )
+            self.parametric_ocp_solver.load_iterate("acados_def_iter/param_ocp_def_iter.json", verbose=False)
             self.parametric_ocp_solver.set(0, "x", x0)
             self.parametric_ocp_solver.set(0, "u", u0)
 
@@ -743,9 +745,7 @@ class MPCBaseClass:
         if not self.qp_solver_created:
             self._build_parametric_quadratic_ocp()
 
-        self.quad_parametric_ocp_solver.load_iterate(
-            "acados_def_iter/quad_param_ocp_def_iter.json"
-        )
+        self.quad_parametric_ocp_solver.load_iterate("acados_def_iter/quad_param_ocp_def_iter.json", verbose=False)
         for batch_idx, (x0, u0) in enumerate(zip(x_batch, u_batch)):
             # TODO: order the batch such that if there are same x0 they become consecutive and we avoid to set again the initialization!
             # slacks coming from standard ocp where only state is slacked (n_slack=nx), here n_slack = nx+nu but only 0,...,N-1

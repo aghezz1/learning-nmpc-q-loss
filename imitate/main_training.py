@@ -12,7 +12,7 @@ import torch.optim as optim
 import yaml
 from tqdm import tqdm
 
-from imitate.autograd import QMpc, Shooting
+from imitate.autograd import QMpc
 from imitate.mpc_acados import MPCBaseClass
 from imitate.utils import (
     DaggerWrapper,
@@ -60,7 +60,7 @@ def create_argument_parser(**kw):
     args.add_argument("--tanh", type=int, default=1)
     args.add_argument("--qp-approx", type=str, default=False)
     args.add_argument("--save-checkpoint", type=str, default=False)
-    args.add_argument("--no-cython", default=False, action="store_true")
+    args.add_argument("--no-cython", default=True, action="store_true")
 
     args = args.parse_args(**kw)
 
