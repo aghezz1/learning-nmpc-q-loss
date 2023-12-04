@@ -21,3 +21,6 @@ Running `python 3.8.12`
 Follow the instruction at: [acados docs](docs.acados.org) \
 After installing acados on your machine, install via pip the acados python interface in the python environment you use to run this repo as follow \
 `pip install -e <acados_root>/interfaces/acados_template`
+
+### Acados speedup for Linux machines
+For Linux machines it is possible to compile the `acados` python interface using `cython`. To do so set the flag `no-cython=False` in the `ArgumentParser` in `main_training.py`.
