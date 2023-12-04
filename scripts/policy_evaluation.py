@@ -135,11 +135,13 @@ def compute_average_stats():
     df = pd.DataFrame()
     for subfolder in DATA_DIR.iterdir():
         new_df = pd.read_csv(subfolder / csv_name)
-        loss = str(subfolder).split("/")[-1].split("_")[1]
+        with open(subfolder / "args.yaml", "r") as f:
+            args_dict = yaml.load(f, Loader=yaml.FullLoader)
+        loss = args_dict["loss"]
         if loss == "vfn":
             loss = "q"
-            qp_approx = str(subfolder).split("/")[-1].split("_")[4]
-            if qp_approx == "True":
+            qp_approx = args_dict["qp_approx"]
+            if qp_approx:
                 loss = "a-q"
         new_df["loss"] = loss
         new_df["cost"] = new_df["tracking_costs"] + new_df["violation_costs"]

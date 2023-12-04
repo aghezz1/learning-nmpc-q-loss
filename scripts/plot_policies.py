@@ -92,7 +92,6 @@ def main():
         if p == "mpc":
             policy = lambda init_state: mpc.solve_ocp(init_state)["controls"][0, :]
         else:
-            breakpoint()
             try:
                 with open(policies[p]["dir"] / "args.yaml", "r") as f:
                     args_dict = yaml.load(f, Loader=yaml.FullLoader)
